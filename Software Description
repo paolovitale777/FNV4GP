@@ -1,0 +1,34 @@
+#Software description
+The software installation process is described step by step on the GitHub repository (https://github.com/paolovitale777/FNCV4GP.git). FNCV4GP home screen shows these main modules: Marker Filtering, Nested Cross-Validation, and Result Summary.
+
+#Markers Filtering
+The marker filtering module consists of three main boxes: “Files”, “Filtering criteria”, and the “Result log”. In the “Files” box, users upload the input genotype file, which can be provided either as a numeric matrix or in HapMap format. 
+Both file types can be supplied as .txt or .csv files, and an output directory must be specified. 
+The HapMap file should follow the IUPAC nucleotide nomenclature, whereas the numeric matrix should be coded as follows: 2 for major alleles, 1 for heterozygotes, and 0 for minor alleles.
+If a HapMap file is uploaded, an internal conversion to numeric format is performed before filtering. In the “Filtering criteria” box, molecular markers can be filtered by missing data, minor allele frequency (MAF), and heterozygosity. 
+Additionally, genotypes can be filtered by missing data and heterozygosity. 
+Imputation can be optionally performed by mean or by the major allele. Finally, the results are shown in the subsequent box Log.
+For each marker, the following parameter rates are shown: missing, heterozygosity, and MAF.
+In the final column, the label “keep” indicates whether the marker passed the specified thresholds.
+The filtered marker matrix is automatically saved as a .txt file in the user-defined output directory. Optionally, filtering reports for both markers and genotypes can also be downloaded. 
+
+#Nested CV
+All other models implemented in FNCV4GP follow the same general structure but differ in their model-specific hyperparameters. In the “Input file” box, users upload the marker file, where rows correspond to genotypes and columns to markers. 
+The marker matrix must be fully imputed; if missing values are present, the software will raise an error. 
+The phenotype file must also be uploaded as a .txt or .csv file. 
+If phenotypic data contain missing values, the corresponding genotypes are excluded from the analysis. 
+Line identifiers must match between the genotypic and phenotypic files to ensure correct pairing. 
+The files may be unbalanced because the software performs an internal matching step and restricts the analysis to common genotypes. 
+Users must also define the output directory where results will be stored. In the “Target” box, the target trait is specified, and an optional logarithmic transformation can be applied. 
+In the “Hyperparameters (inner tuning grid)” box, users define the grid of hyperparameter values to be evaluated. For the SVR model, the tunable hyperparameters include kernel type, epsilon, C, and optionally gamma. 
+In the “Nested CV setting” box, users can select the number of cycles and the number of folds for the outer and inner loops. 
+A random seed can also be set to ensure reproducibility and a fair comparison of models.
+Users can also choose the evaluation criterion used for hyperparameter selection: mean absolute percentage error (MAPE), mean squared prediction error (MSPE), or prediction accuracy (PA).
+Once all settings are defined, the nested cross-validation procedure is executed. 
+Results are automatically saved as a .csv file in the specified output directory, and the first ten rows are displayed in the log panel.  …
+
+#Result Summary
+The result summary module is designed to process outputs from the nested CV analysis and visualize model performance. Users upload one or more result files using the Add CSV files option, and each model can be assigned a custom name. 
+By clicking the Plot button, the software generates bar plots with standard error bars for the variable PA_test, which corresponds to the predictive ability on the test sets. 
+The resulting plot can be downloaded in different image formats. 
+Finally, users can clear the uploaded files and generate new plots using alternative result sets. 
