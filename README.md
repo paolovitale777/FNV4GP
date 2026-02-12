@@ -36,4 +36,4 @@ This is Python-based, user-friendly software for performing Nested Cross-Validat
 
 •Download the FNCV4GP GUI app 
 
-•Go to your prompt and lunch "python FNCV4GP.py"
+•Go to your prompt and run "python FNCV4GP.py" or open it in your Visual Studio and just run the code.
