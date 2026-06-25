@@ -342,8 +342,126 @@ class MarkerFilterApp(tk.Tk):
         self._result_q = queue.Queue()
 
         # Build UI (pages)
+        self._apply_styles()
         self._build_ui()
 
+
+    # -----------------------------
+    # Global style
+    # -----------------------------
+    def _apply_styles(self):
+        BG     = "#f0f2f5"
+        NAV    = "#1a365d"
+        ACCENT = "#2b6cb0"
+        TEXT   = "#1a202c"
+        BORDER = "#cbd5e0"
+        WHITE  = "#ffffff"
+        MUTED  = "#718096"
+
+        s = ttk.Style(self)
+        s.theme_use("clam")
+
+        s.configure(".",
+            background=BG, foreground=TEXT,
+            font=("Segoe UI", 10),
+            bordercolor=BORDER,
+        )
+        s.configure("TFrame",       background=BG)
+        s.configure("TLabel",       background=BG, foreground=TEXT)
+        s.configure("TCheckbutton", background=BG, foreground=TEXT,
+                    indicatorcolor=WHITE, indicatorrelief="flat")
+        s.configure("TRadiobutton", background=BG, foreground=TEXT)
+        s.configure("TSeparator",   background=BORDER)
+
+        s.configure("TButton",
+            background=ACCENT, foreground=WHITE,
+            font=("Segoe UI", 10, "bold"),
+            relief="flat", borderwidth=0,
+            padding=(8, 4),
+        )
+        s.map("TButton",
+            background=[("active", "#1e4785"), ("disabled", "#a0aec0")],
+            foreground=[("disabled", MUTED)],
+        )
+
+        s.configure("TLabelframe",
+            background=BG, relief="solid",
+            borderwidth=1, bordercolor=BORDER,
+        )
+        s.configure("TLabelframe.Label",
+            background=BG, foreground=ACCENT,
+            font=("Segoe UI", 10, "bold"),
+            padding=(4, 0),
+        )
+
+        s.configure("TEntry",
+            fieldbackground=WHITE, foreground=TEXT,
+            bordercolor=BORDER, lightcolor=BORDER, darkcolor=BORDER,
+            padding=(4, 3),
+        )
+        s.configure("TCombobox",
+            fieldbackground=WHITE, foreground=TEXT,
+            selectbackground=ACCENT, selectforeground=WHITE,
+        )
+        s.configure("TSpinbox",
+            fieldbackground=WHITE, foreground=TEXT,
+            arrowcolor=ACCENT,
+        )
+        s.configure("TScrollbar",
+            background=BORDER, troughcolor=BG,
+            arrowcolor=MUTED, relief="flat",
+        )
+        s.configure("TProgressbar",
+            background=ACCENT, troughcolor=BG,
+        )
+        s.configure("Treeview",
+            background=WHITE, fieldbackground=WHITE,
+            foreground=TEXT, rowheight=24,
+        )
+        s.configure("Treeview.Heading",
+            background=NAV, foreground=WHITE,
+            font=("Segoe UI", 10, "bold"),
+            relief="flat",
+        )
+        s.map("Treeview.Heading",
+            background=[("active", ACCENT)],
+        )
+        s.map("Treeview",
+            background=[("selected", ACCENT)],
+            foreground=[("selected", WHITE)],
+        )
+
+        # Home page outlined buttons
+        s.configure("Home.TButton",
+            background=WHITE, foreground=ACCENT,
+            font=("Segoe UI", 11),
+            relief="solid", borderwidth=1,
+            padding=(12, 7),
+        )
+        s.map("Home.TButton",
+            background=[("active", ACCENT)],
+            foreground=[("active", WHITE)],
+        )
+
+        # Navigation bar button
+        s.configure("Nav.TFrame",  background=NAV)
+        s.configure("Nav.TButton",
+            background=NAV, foreground=WHITE,
+            font=("Segoe UI", 10), relief="flat",
+            borderwidth=0, padding=(10, 6),
+        )
+        s.map("Nav.TButton",
+            background=[("active", ACCENT)],
+        )
+
+        # Section heading label
+        s.configure("SectionHead.TLabel",
+            font=("Segoe UI", 11, "bold"),
+            foreground=ACCENT, background=BG,
+        )
+
+        self._canvas.configure(bg=BG)
+        self.configure(bg=NAV)
 
     # -----------------------------
     # Scroll handling
@@ -443,12 +561,13 @@ class MarkerFilterApp(tk.Tk):
 
 
         # Top navigation bar
-        nav = ttk.Frame(self._main)
-        nav.pack(fill="x", padx=10, pady=(10, 0))
+        nav = ttk.Frame(self._main, style="Nav.TFrame")
+        nav.pack(fill="x")
 
-        ttk.Button(nav, text="Home", command=self.show_home).pack(side="left", padx=(0, 6))
+        ttk.Button(nav, text="Home", command=self.show_home,
+                   style="Nav.TButton").pack(side="left", padx=(6, 0), pady=4)
 
-        ttk.Separator(self._main, orient="horizontal").pack(fill="x", padx=10, pady=(6, 10))
+        ttk.Separator(self._main, orient="horizontal").pack(fill="x")
 
         # Pages container
         pages = ttk.Frame(self._main)
@@ -509,275 +628,64 @@ class MarkerFilterApp(tk.Tk):
         self.show_home()
 
     def _build_home_page(self, parent):
-        pad = {"padx": 20, "pady": 20}
+        NAV    = "#1a365d"
+        ACCENT = "#2b6cb0"
 
-        home_box = ttk.Frame(parent)
-        home_box.pack(expand=True, anchor="n")
+        # -- Header banner ---------------------------------------------------
+        header = tk.Frame(parent, bg=NAV)
+        header.pack(fill="x")
 
+        tk.Label(
+            header, text="FNCV4GP",
+            font=("Segoe UI", 22, "bold"),
+            bg=NAV, fg="white"
+        ).pack(pady=(22, 2))
 
-        # Title
-
-          # Title
-        ttk.Label(
-            home_box,
-            text="FNCV4GP",
-            font=("Segoe UI", 50, "bold")
-        ).pack(pady=(0, 5))
-
-
-        ttk.Label(
-            home_box,
+        tk.Label(
+            header,
             text="Fast Nested Cross-Validation for Genomic Prediction",
-            font=("Segoe UI", 30, "bold")
-        ).pack(pady=(0, 5))
-
-
-        ttk.Label(
-            home_box,
-            text="Welcome",
-            font=("Segoe UI", 30, "bold")
-        ).pack(pady=(0, 10))
-
-        ttk.Label(
-            home_box,
-            text="Choose an analysis module",
-            font=("Segoe UI", 20)
-        ).pack(pady=(0, 30))
-
-
-
-        style = ttk.Style()
-        style.configure(
-            "Home.TButton",
-            font=("Segoe UI", 20)
-        )
-
-
-
-        ttk.Label(
-            home_box,
-            text="------------------------------------------------------------------------------",
-            font=("Segoe UI", 20)
-        ).pack(pady=(0, 30))
-
-
-
-
-        ttk.Label(
-            home_box,
-            text="Filtering",
-            font=("Segoe UI", 20, "bold")
-        ).pack(pady=(0, 30))
-
-
-    # --- Marker filtering button ---
-        ttk.Button(
-            home_box,
-            text="Marker filtering",
-            width=60,
-            style="Home.TButton",
-            command=self.show_filtering
-        ).pack(pady=10)
-
-    
-
-
-
-        ttk.Label(
-            home_box,
-            text="------------------------------------------------------------------------------",
-            font=("Segoe UI", 20)
-        ).pack(pady=(0, 30))
-
-
-
-        ttk.Label(
-            home_box,
-            text="Nested CV",
-            font=("Segoe UI", 20, "bold")
-        ).pack(pady=(0, 30))
-
-
-
-        ttk.Button(
-            home_box,
-            text="Ridge Regression",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_ridge
-        ).pack(pady=10)
-
-    
-        ttk.Button(
-            home_box,
-            text="Bayesian Ridge Regression",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_bayesianridge
-        ).pack(pady=10)
- 
-    
-
-        ttk.Button(
-            home_box,
-            text="LASSO",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_lasso
-        ).pack(pady=10)
-
-
-             
-        ttk.Button(
-            home_box,
-            text="Kernel Ridge Regression",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_kernelridge
-        ).pack(pady=10)
- 
-
-
-    
-        # --- Nested CV button (THIS is what you asked about) ---
-        ttk.Button(
-            home_box,
-            text="Support Vector Regression",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv
-        ).pack(pady=10)
-
-
-        ttk.Button(
-            home_box,
-            text="Elastic Net",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_elasticnet
-        ).pack(pady=10)
-
-
-
-        ttk.Button(
-            home_box,
-            text="Stochastic Gradient Descent",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_SGDRegressor
-        ).pack(pady=10)
-
-
-        ttk.Button(
-            home_box,
-            text="Partial Least Squares",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_PLSRegression
-        ).pack(pady=10)
-
-
-        ttk.Button(
-            home_box,
-            text="Nearest Neighbors",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_KNeighborsRegressor
-        ).pack(pady=10)
-
-        ttk.Button(
-            home_box,
-            text="Gaussian Process Regression",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_GaussianProcessRegressor
-        ).pack(pady=10)
-
-
-        ttk.Button(
-            home_box,
-            text="Decision Tree",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_DecisionTreeRegressor
-        ).pack(pady=10)
-
-
-        ttk.Button(
-            home_box,
-            text="Random Forest",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_RandomForestRegressor
-        ).pack(pady=10)
-
-        
-        
-        ttk.Button(
-            home_box,
-            text="Gradient Boosting",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_GradientBoostingRegressor
-        ).pack(pady=10)
-
-
-        ttk.Button(
-            home_box,
-            text="Multi-Layer Perception",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_MLPRegressor
-        ).pack(pady=10)
-
-
-
-        ttk.Button(
-            home_box,
-            text="Voting Regressor",
-            style="Home.TButton",
-            width=60,
-            command=self.show_cv_VotingRegressor
-        ).pack(pady=10)
-
-
-
-        ttk.Label(
-            home_box,
-            text="------------------------------------------------------------------------------",
-            font=("Segoe UI", 20)
-        ).pack(pady=(0, 30))
-
-
-
-        ttk.Label(
-            home_box,
-            text="Summary",
-            font=("Segoe UI", 20, "bold")
-        ).pack(pady=(0, 30))
-
-
-
-        ttk.Button(
-            home_box,
-            text="Predictability Test",
-            width=60,
-            style="Home.TButton",
-            command=self.show_summary
-        ).pack(pady=10)
-
-        ttk.Label(
-            home_box,
-            text="------------------------------------------------------------------------------",
-            font=("Segoe UI", 20)
-        ).pack(pady=(0, 30))
-
-
-
-
-
-
-
+            font=("Segoe UI", 11),
+            bg=NAV, fg="#90cdf4"
+        ).pack(pady=(0, 22))
+
+        # -- Body ------------------------------------------------------------
+        body = ttk.Frame(parent)
+        body.pack(expand=True, anchor="n", padx=60, pady=20)
+
+        def _section(text):
+            ttk.Label(body, text=text, style="SectionHead.TLabel").pack(
+                anchor="w", pady=(20, 2)
+            )
+            ttk.Separator(body, orient="horizontal").pack(fill="x", pady=(0, 8))
+
+        def _btn(text, cmd):
+            ttk.Button(body, text=text, width=52,
+                       style="Home.TButton", command=cmd).pack(pady=3)
+
+        _section("Preprocessing")
+        _btn("Marker Filtering",            self.show_filtering)
+
+        _section("Nested Cross-Validation")
+        _btn("Ridge Regression",            self.show_cv_ridge)
+        _btn("Bayesian Ridge Regression",   self.show_cv_bayesianridge)
+        _btn("LASSO",                       self.show_cv_lasso)
+        _btn("Kernel Ridge Regression",     self.show_cv_kernelridge)
+        _btn("Support Vector Regression",   self.show_cv)
+        _btn("Elastic Net",                 self.show_cv_elasticnet)
+        _btn("Stochastic Gradient Descent", self.show_cv_SGDRegressor)
+        _btn("Partial Least Squares",       self.show_cv_PLSRegression)
+        _btn("Nearest Neighbors",           self.show_cv_KNeighborsRegressor)
+        _btn("Gaussian Process Regression", self.show_cv_GaussianProcessRegressor)
+        _btn("Decision Tree",               self.show_cv_DecisionTreeRegressor)
+        _btn("Random Forest",               self.show_cv_RandomForestRegressor)
+        _btn("Gradient Boosting",           self.show_cv_GradientBoostingRegressor)
+        _btn("Multi-Layer Perceptron",      self.show_cv_MLPRegressor)
+        _btn("Voting Regressor",            self.show_cv_VotingRegressor)
+
+        _section("Results")
+        _btn("Predictability Test",         self.show_summary)
+
+        ttk.Frame(body, height=20).pack()
 
     def _build_cv_page(self, parent):
         # Create the embedded CV UI directly in this page (NO new window)
