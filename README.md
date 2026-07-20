@@ -1,4 +1,4 @@
-# FNCV4GP
+# FNV4GP
 Fast Nested Validation for Genomic Prediction
 
 # Description
@@ -23,7 +23,8 @@ This is Python-based, user-friendly software for performing Nested Cross-Validat
 2) Adjusted mean trait values such as best linear unbiased estimates (BLUEs) for the training and testing populations
 
 • Summary 
-1) Outputs from Nested CV modules 
+1) Outputs from Nested CV modules
+2) Outputs from Independent Validation
 
 # Installation
 •Install Python 3.12. https://www.python.org/downloads/
