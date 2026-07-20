@@ -1,13 +1,14 @@
 # FNCV4GP
-Fast Nested Cross-Validation for Genomic Prediction
+Fast Nested Validation for Genomic Prediction
 
 # Description
-This is Python-based, user-friendly software for performing Nested Cross-Validation to optimize tuning for a wide range of models.
+This is Python-based, user-friendly software for performing Nested Cross-Validation and Independent Validation to optimize tuning for a wide range of models.
 
 # Key Features 
 1) Marker filtering
-2) Running a Nested Cross-Validation for a wide range of models
-3) Summary of the results   
+2) Nested Cross-Validation for a wide range of models
+3) Independent Validation
+4) Summary of the results   
 
 # Inputs
 • Marker filtering
@@ -16,6 +17,10 @@ This is Python-based, user-friendly software for performing Nested Cross-Validat
 • Nested CV
 1) Numerical matrix coded 2 (major Homozygous), 0 (minor Homozygous), and 1 (Heterozygous)
 2) Adjusted mean trait values such as best linear unbiased estimates (BLUEs)
+
+• Independent Validation
+1) Numerical matrix coded 2 (major Homozygous), 0 (minor Homozygous), and 1 (Heterozygous) for the training and testing populations
+2) Adjusted mean trait values such as best linear unbiased estimates (BLUEs) for the training and testing populations
 
 • Summary 
 1) Outputs from Nested CV modules 
