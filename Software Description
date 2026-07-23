@@ -1,34 +1,51 @@
-#Software description
-The software installation process is described step by step on the GitHub repository (https://github.com/paolovitale777/FNCV4GP.git). FNCV4GP home screen shows these main modules: Marker Filtering, Nested Cross-Validation, and Result Summary.
+## Software description
 
-#Markers Filtering
-The marker filtering module consists of three main boxes: “Files”, “Filtering criteria”, and the “Result log”. In the “Files” box, users upload the input genotype file, which can be provided either as a numeric matrix or in HapMap format. 
-Both file types can be supplied as .txt or .csv files, and an output directory must be specified. 
-The HapMap file should follow the IUPAC nucleotide nomenclature, whereas the numeric matrix should be coded as follows: 2 for major alleles, 1 for heterozygotes, and 0 for minor alleles.
-If a HapMap file is uploaded, an internal conversion to numeric format is performed before filtering. In the “Filtering criteria” box, molecular markers can be filtered by missing data, minor allele frequency (MAF), and heterozygosity. 
-Additionally, genotypes can be filtered by missing data and heterozygosity. 
-Imputation can be optionally performed by mean or by the major allele. Finally, the results are shown in the subsequent box Log.
-For each marker, the following parameter rates are shown: missing, heterozygosity, and MAF.
-In the final column, the label “keep” indicates whether the marker passed the specified thresholds.
-The filtered marker matrix is automatically saved as a .txt file in the user-defined output directory. Optionally, filtering reports for both markers and genotypes can also be downloaded. 
+The software installation process is described step by step in the GitHub repository (https://github.com/paolovitale777/FNV4GP.git). The FNV4GP home screen provides access to three main modules: Marker Filtering, Nested Validation, and Result Summary.
 
-#Nested CV
-All other models implemented in FNCV4GP follow the same general structure but differ in their model-specific hyperparameters. In the “Input file” box, users upload the marker file, where rows correspond to genotypes and columns to markers. 
-The marker matrix must be fully imputed; if missing values are present, the software will raise an error. 
-The phenotype file must also be uploaded as a .txt or .csv file. 
-If phenotypic data contain missing values, the corresponding genotypes are excluded from the analysis. 
-Line identifiers must match between the genotypic and phenotypic files to ensure correct pairing. 
-The files may be unbalanced because the software performs an internal matching step and restricts the analysis to common genotypes. 
-Users must also define the output directory where results will be stored. In the “Target” box, the target trait is specified, and an optional logarithmic transformation can be applied. 
-In the “Hyperparameters (inner tuning grid)” box, users define the grid of hyperparameter values to be evaluated. For the SVR model, the tunable hyperparameters include kernel type, epsilon, C, and optionally gamma. 
-In the “Nested CV setting” box, users can select the number of cycles and the number of folds for the outer and inner loops. 
-A random seed can also be set to ensure reproducibility and a fair comparison of models.
-Users can also choose the evaluation criterion used for hyperparameter selection: mean absolute percentage error (MAPE), mean squared prediction error (MSPE), or prediction accuracy (PA).
-Once all settings are defined, the nested cross-validation procedure is executed. 
-Results are automatically saved as a .csv file in the specified output directory, and the first ten rows are displayed in the log panel.  …
+---
 
-#Result Summary
-The result summary module is designed to process outputs from the nested CV analysis and visualize model performance. Users upload one or more result files using the Add CSV files option, and each model can be assigned a custom name. 
-By clicking the Plot button, the software generates bar plots with standard error bars for the variable PA_test, which corresponds to the predictive ability on the test sets. 
-The resulting plot can be downloaded in different image formats. 
-Finally, users can clear the uploaded files and generate new plots using alternative result sets. 
+## Marker Filtering
+
+The marker filtering module consists of three main sections: **Files**, **Filtering criteria**, and **Result log**.
+
+In the **Files** section, users upload the input genotype file, which can be provided either as a numeric matrix or in HapMap format. Both file types can be supplied as `.txt` or `.csv` files, and an output directory must be specified.
+
+The HapMap file should follow the IUPAC nucleotide nomenclature, whereas the numeric matrix should be coded as follows: 2 for major alleles, 1 for heterozygotes, and 0 for minor alleles. If a HapMap file is uploaded, an internal conversion to numeric format is performed before filtering.
+
+In the **Filtering criteria** section, molecular markers can be filtered by missing data, minor allele frequency (MAF), and heterozygosity. Additionally, genotypes can be filtered by missing data and heterozygosity. Imputation can be optionally performed using the mean or the major allele.
+
+Results are displayed in the **Result log** section, which reports: the output directory path; the number of markers and genotypes before and after filtering; the number of markers removed overall and per filter; and, for each marker, the missing data rate, heterozygosity rate, and MAF. The final column indicates whether each marker passed the specified thresholds ("keep"). The filtered marker matrix is automatically saved as a `.txt` file in the user-defined output directory. Optionally, filtering reports for both markers and genotypes can be downloaded.
+
+---
+
+## Nested Validation
+
+### Cross-validation
+
+All models implemented in FNV4GP follow the same general interface structure but differ in their model-specific hyperparameters.
+
+In the **Input file** section, users upload the marker file, where rows correspond to genotypes and columns to markers. The marker matrix must be fully imputed; if missing values are present, the software will raise an informative error message. The phenotype file must also be uploaded as a `.txt` or `.csv` file. If phenotypic data contain missing values, the corresponding genotypes are excluded from the analysis. Line identifiers must match between the genotypic and phenotypic files to ensure correct pairing. The files may be unbalanced, as the software performs an internal matching step and restricts the analysis to common genotypes. Users must also define the output directory where results will be stored.
+
+In the **Target** section, the target trait is specified, and an optional logarithmic transformation can be applied.
+
+In the **Hyperparameters (inner tuning grid)** section, users define the grid of hyperparameter values to be evaluated during the inner-loop cross-validation. For example, for the SVR model, the tunable hyperparameters include kernel type, epsilon, C, and optionally gamma.
+
+In the **Nested CV settings** section, users can select the number of cycles and the number of folds for the outer and inner loops. A random seed can also be set to ensure reproducibility and fair model comparison. Users can also choose the evaluation criterion used for hyperparameter selection: mean absolute error (MAE), mean squared error (MSE), or predictive ability (PA).
+
+Once all settings are defined, the nested cross-validation procedure is executed. Results are automatically saved as a `.csv` file in the specified output directory, and the first ten rows are displayed in the log panel. The output file contains the following columns: cycle, outer fold, number of individuals in the training set (n_train), number of individuals in the test set (n_test), Pearson's correlation between observed and fitted values (PA_train), Pearson's correlation between observed and predicted values (PA_test), mean prediction error (MPE), mean absolute error (MAE), mean absolute percentage error (MAPE), mean squared percentage error (MSPE), the best hyperparameters for each run, and the difference between PA_train and PA_test (PA_gap).
+
+### Independent validation
+
+The independent validation module allows users to evaluate model performance by training on a dedicated training population (TP) and predicting an independent test set, better simulating real-world breeding scenarios where a TP is used to predict a genotypically characterized but phenotypically unobserved breeding population.
+
+In the independent validation workflow, an internal k-fold cross-validation is first performed on the TP to identify the best hyperparameter combination based on the lowest error (MAE or MSE) or the highest PA. The final model is then refitted using the full TP and the selected hyperparameters, and predictions are generated for the independent test set. Predictive ability corresponds to Pearson's correlation between the predicted and observed values of the independent set.
+
+The independent validation module supports all 15 models available in the cross-validation module. The genotypic and phenotypic files for the training and test datasets must be uploaded separately. A random seed can also be set to ensure reproducibility. No outer-loop fold number or number of cycles needs to be specified for this validation strategy.
+
+---
+
+## Result Summary
+
+The result summary module processes outputs from the nested CV or independent validation analyses and visualizes model performance. Users upload one or more result `.csv` files using the **Add CSV files** option, and each model can be assigned a custom name for display purposes.
+
+By clicking the **Plot** button, the software generates bar plots with standard error bars for PA_test, representing the predictive ability on the test sets. For independent validation results, the number of observations (n) must be specified to correctly compute the standard error for the correlation coefficient. The resulting plot can be downloaded in different image formats. Users can also clear the uploaded files and generate new plots using alternative result sets.
