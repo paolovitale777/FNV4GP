@@ -27,7 +27,7 @@ This is Python-based, user-friendly software for performing Nested Cross-Validat
 2) Outputs from Independent Validation
 
 # Installation
-•Install Python 3.12. https://www.python.org/downloads/
+•Install Python >3.10. https://www.python.org/downloads/
 
 •Install the following libraries:
 1) tkinter
